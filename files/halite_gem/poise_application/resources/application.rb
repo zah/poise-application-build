@@ -64,6 +64,7 @@ module PoiseApplication
         #   individual subresources.
         #   @return [String]
         attribute(:group, kind_of: String)
+        attribute(:mode, kind_of: String, default: "755")
         # @!attribute action_on_update
         #   Action to run when any subresource is updated. Defaults to `:restart`.
         #   @return [String, Symbol, nil, false]
@@ -203,7 +204,9 @@ module PoiseApplication
             directory new_resource.path do
               owner new_resource.owner
               group new_resource.group
-              mode '755'
+              if new_resource.mode != "keep"
+                mode new_resource.mode || '755'
+              end
             end
           end
         end
